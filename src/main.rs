@@ -25,6 +25,11 @@ fn main() {
             let mut _writer = io::BufWriter::new(&stream);
             let mut count = 0;
 
+            match get_data(&mut reader) {
+                Ok(data) => println!("{data:?}"),
+                Err(err) => println!("{err}"),
+            }
+
             loop {
                 let msg = get_data(&mut reader).unwrap();
                 if let ResponseData::Sky(sky) = msg {
