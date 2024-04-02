@@ -1,0 +1,10 @@
+[Unit]
+Description=GPSD logging of the number of locked satellites
+
+[Service]
+Type=simple
+Restart=always
+ExecStart=/usr/bin/gpsd-prometheus
+
+[Install]
+WantedBy=multi-user.target
