@@ -23,6 +23,10 @@ fn main() {
         if let Ok(stream) = TcpStream::connect("127.0.0.1:2947") {
             let mut reader = io::BufReader::new(&stream);
             let mut _writer = io::BufWriter::new(&stream);
+
+            let mut reader: &mut dyn io::BufRead = &mut reader;
+            let mut _writer: &mut io::BufWriter<dyn std::io::Write> = &mut _writer;
+
             let mut count = 0;
 
             match get_data(&mut reader) {
