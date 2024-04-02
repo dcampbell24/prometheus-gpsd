@@ -1,0 +1,7 @@
+[package]
+name = "gpsd-prometheus"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+gpsd_proto = "1"
