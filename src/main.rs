@@ -52,12 +52,12 @@ fn main() {
             match rx.recv_timeout(timeout - t0.elapsed()) {
                 Ok(count_) => count = count_,
                 Err(_) => {
-                    println!("...");
+                    // println!("...");
                     break;
                 }
             }
         }
 
-        println!("{count}")
+        // println!("{count}")
     }
 }
