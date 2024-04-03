@@ -1,5 +1,5 @@
 use std::net::{Ipv4Addr, TcpStream};
-use std::sync::mpsc::{channel, Sender}; //, RecvTimeoutError};
+use std::sync::mpsc::{channel, Sender};
 use std::thread;
 use std::time::{Duration, Instant};
 use std::{io, net::SocketAddrV4};
@@ -33,14 +33,8 @@ fn main() {
         let t0 = Instant::now();
         let mut count = 0;
 
-        while t0.elapsed() < timeout {
-            match rx.recv_timeout(timeout - t0.elapsed()) {
-                Ok(count_) => count = count_,
-                Err(_) => {
-                    println!("*...*");
-                    break;
-                }
-            }
+        while let Ok(count_) = rx.recv_timeout(timeout - t0.elapsed()) {
+            count = count_;
         }
 
         println!("*{count}*")
@@ -55,23 +49,16 @@ pub fn demo_forever<R>(
 where
     R: std::io::Write,
 {
-
-        let mut count = 0;
-
-        handshake(reader, writer).unwrap();
-
-        loop {
-            let msg = get_data(&mut reader).unwrap();
-            if let ResponseData::Sky(sky) = msg {
-                count = sky.satellites.map_or_else(
-                    || 0,
-                    |sats| sats.iter().filter(|sat| sat.used).map(|_| 1).sum(),
-                );
-                println!("{count}");
-                tx.send(count).expect("Unable to send on channel");
-            } else {
-                println!("... {count}")
-            }
+    handshake(reader, writer).unwrap();
+    let mut _count = 0;
+    loop {
+        let msg = get_data(&mut reader).unwrap();
+        if let ResponseData::Sky(sky) = msg {
+            _count = sky.satellites.map_or_else(
+                || 0,
+                |sats| sats.iter().filter(|sat| sat.used).map(|_| 1).sum(),
+            );
+            tx.send(_count).expect("Unable to send on channel");
         }
-
+    }
 }
