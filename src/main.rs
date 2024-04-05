@@ -1,8 +1,8 @@
-use std::net::{Ipv4Addr, TcpStream};
+use std::net::{SocketAddr, TcpStream};
 use std::sync::mpsc::{channel, Sender};
 use std::thread;
 use std::time::{Duration, Instant};
-use std::{io, net::SocketAddrV4};
+use std::io;
 
 use gpsd_proto::{get_data, handshake, GpsdError, ResponseData};
 use metrics::gauge;
@@ -11,7 +11,7 @@ use metrics_exporter_prometheus::PrometheusBuilder;
 fn main() {
     let builder = PrometheusBuilder::new();
     builder
-        .with_http_listener(SocketAddrV4::new(Ipv4Addr::new(0, 0, 0, 0), 9002))
+        .with_http_listener(SocketAddr::from(([0, 0, 0, 0], 9002)))
         .install()
         .expect("failed to install recorder/exporter");
 
