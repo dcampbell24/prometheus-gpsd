@@ -1,5 +1,8 @@
 [package]
 name = "gpsd-prometheus"
+description = "Log the number of gpsd connected satellites."
+authors = ["David Lawrence Campbell"]
+license = "MIT"
 version = "0.1.0"
 edition = "2021"
 
