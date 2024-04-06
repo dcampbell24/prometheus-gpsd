@@ -15,14 +15,14 @@ fn main() {
         .install()
         .expect("failed to install recorder/exporter");
 
-    let _satellites = gauge!("satellites");
+    let satellites = gauge!("satellites");
 
     let (tx, rx) = channel();
     if let Ok(stream) = TcpStream::connect("127.0.0.1:2947") {
         thread::spawn(move || {
             let mut reader = io::BufReader::new(&stream);
             let mut writer = io::BufWriter::new(&stream);
-            demo_forever(tx, &mut reader, &mut writer).unwrap();
+            loop_forever(tx, &mut reader, &mut writer).unwrap();
         });
     } else {
         panic!("Couldn't connect to gpsd...");
@@ -37,11 +37,11 @@ fn main() {
             count = count_;
         }
 
-        println!("*{count}*")
+        satellites.set(count);
     }
 }
 
-pub fn demo_forever<R>(
+pub fn loop_forever<R>(
     tx: Sender<i32>,
     mut reader: &mut dyn io::BufRead,
     writer: &mut io::BufWriter<R>,
