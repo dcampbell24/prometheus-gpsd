@@ -16,5 +16,5 @@ metrics-exporter-prometheus = "0.14"
 maintainer = "David Campbell <dcampbell24@gmail.com>"
 assets = [
     ["target/release/gpsd-prometheus", "usr/bin/", "755"],
-    ["gpsd-prometheus.service", "etc/systemd/system/", "755"],
+    ["gpsd-prometheus.service", "etc/systemd/system/", "644"],
 ]
